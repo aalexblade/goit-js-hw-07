@@ -1,62 +1,53 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
-const allGallery = document.querySelector(".gallery");
-const itemMarkup = createNewCardGallery(galleryItems);
+console.log(galleryItems);
 
-function createNewCardGallery(galleryItems) {
-  return galleryItems
-    .map(({ preview, original, description }) => {
-      return `<div class="gallery__item">
-      <a class="gallery__link" href="${original}">
-      <img
-      class="gallery__image"
-      src="${preview}"
-      data-source="${original}"
-      alt="${description}"
+const gallery = document.querySelector('.gallery');
+const imageMarkup = createMarkup(galleryItems);
+
+gallery.insertAdjacentHTML('beforeend', imageMarkup);
+gallery.addEventListener('click', onGalleryClick)
+
+
+function createMarkup(galleryItems) {
+    return galleryItems
+        .map(({ preview, original, description }) => {
+            return `
+       <div class="gallery__item">
+            <a class="gallery__link" href="${preview}">
+        <img
+        class="gallery__image"
+        src="${preview}"
+        data-source="${original}"
+        alt="${description}"
         />
         </a>
-        </div>`;
-    })
-    .join("");
+        </div>
+        `
+        }) 
+    .join('');
 }
-allGallery.insertAdjacentHTML("beforeend", itemMarkup);
 
-// =====================================================================
-// Modal Window (Открытие модального окна по клику на элементе галереи.)
-allGallery.addEventListener("click", openModal);
+function onGalleryClick(evt) {
+    evt.preventDefault();
+    if (!evt.target.classList.contains('gallery__image')) {
+        return
+    };
 
-function openModal(event) {
-  event.preventDefault();
 
-  const activePicture = event.target.dataset.source;
-
-  const instance = basicLightbox.create(
+    const instance = basicLightbox.create(
+        `
+    <img src="${evt.target.dataset.source}" width="800" height="600">
     `
-       <img src="${activePicture}" width="800" height="600">
-	`,
+    );
 
-    {
-      onShow: () => {
-        window.addEventListener("keydown", closeOnClickEscapeBtn);
-      },
-      onClose: () => {
-        window.removeEventListener("keydown", closeOnClickEscapeBtn);
-      },
-    }
-  );
-  instance.show();
+    instance.show();
 
-  // ==========================================================================
-  // Добавь закрытие модального окна по нажатию клавиши Escape.
-
-  function closeOnClickEscapeBtn(event) {
-    if (event.key === "Escape") {
-      instance.close();
-    }
-  }
+     document.addEventListener('keydown', (eventKeyboard) => {
+    if (eventKeyboard.key === 'Escape') instance.close();
+  });
 }
-
 
 
 

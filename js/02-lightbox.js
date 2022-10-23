@@ -22,7 +22,7 @@ const lightbox = new SimpleLightbox(".gallery a", {
   captionDelay: 250,
 });
 
-// test =====================================================
+
 lightbox.on("nextDone.simplelightbox", function () {
   console.log("This is next picture");
 });
@@ -30,6 +30,5 @@ lightbox.on("nextDone.simplelightbox", function () {
 lightbox.on("change.simplelightbox", function () {
   console.log("We wait next picture");
 });
-// ===========================================================
 
 console.log(galleryItems);
